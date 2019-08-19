@@ -4,7 +4,7 @@
 //
 //object SubscribeTopic {
 //
-//  def main(args: Array[String]): Unit = {
+//  def cleanTopicMessages(args: Array[String]): Unit = {
 //    val spark = SparkSession
 //      .builder
 //      .appName("Spark-Kafka-Integration")
