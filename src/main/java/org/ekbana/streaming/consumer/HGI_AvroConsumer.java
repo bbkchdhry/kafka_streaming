@@ -98,13 +98,14 @@ public class HGI_AvroConsumer {
                             Gson gson = new Gson();
                             ClassDetails classDetails = gson.fromJson(record.value().toString(), ClassDetails.class);
                             String data = classDetails.getAllData().toString().replaceAll(JsonNullZeroReg, "");
-                            System.out.printf("ClassDetails: \n%s \n\n", data);
+                            System.out.printf("FilteredData: \n%s \n\n", data);
 
+                            ClassDetails final_data = new ClassDetails(data);
 
                         if(producerTopicName != null){
                             // Produce data to new topic
                             try {
-                                Producer.produce(producerTopicName, data, BOOTSTRAP_SERVERS);
+                                Producer.produce(producerTopicName, final_data, BOOTSTRAP_SERVERS);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

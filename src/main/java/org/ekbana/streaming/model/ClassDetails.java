@@ -1,5 +1,8 @@
 package org.ekbana.streaming.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.json.JSONObject;
 
 public class ClassDetails {
@@ -14,12 +17,37 @@ public class ClassDetails {
     private String PolicyIssuanceId;
     private String ClassId;
     private String PortfolioId;
+//    @JsonProperty
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String ClassDetailJSON;
+//    @JsonProperty
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String CalulationDetailJSON;
     private boolean HasMultipleAssets;
     private boolean IsIssued;
     private boolean IsDraft;
     private String BranchCode;
+
+    public ClassDetails(String str_data){
+        JSONObject data = new JSONObject(str_data);
+        if(data.has("Id")) this.setId(data.getString("Id"));
+        if(data.has("CreatedBy")) this.setCreatedBy(data.getString("CreatedBy"));
+        if(data.has("UpdatedBy")) this.setUpdatedBy(data.getString("UpdatedBy"));
+        if(data.has("CreatedDate")) this.setCreatedDate(data.getLong("CreatedDate"));
+        if(data.has("UpdatedDate")) this.setUpdatedDate(data.getLong("UpdatedDate"));
+        if(data.has("IsDeleted")) this.setDeleted(data.getBoolean("IsDeleted"));
+        if(data.has("PolicyNo")) this.setPolicyNo(data.getString("PolicyNo"));
+        if(data.has("DocumentNo")) this.setDocumentNo(data.getString("DocumentNo"));
+        if(data.has("PolicyIssuanceId")) this.setPolicyIssuanceId(data.getString("PolicyIssuanceId"));
+        if(data.has("ClassId")) this.setClassId(data.getString("ClassId"));
+        if(data.has("PortfolioId")) this.setPortfolioId(data.getString("PortfolioId"));
+        if(data.has("ClassDetailJSON")) this.setClassDetailJSON(data.get("ClassDetailJSON").toString());
+        if(data.has("CalulationDetailJSON")) this.setCalulationDetailJSON(data.get("CalulationDetailJSON").toString());
+        if(data.has("HasMultipleAssests")) this.setHasMultipleAssets(data.getBoolean("HasMultipleAssests"));
+        if(data.has("IsIssued")) this.setIssued(data.getBoolean("IsIssued"));
+        if(data.has("IsDraft")) this.setDraft(data.getBoolean("IsDraft"));
+        if(data.has("BranchCode")) this.setBranchCode(data.getString("BranchCode"));
+    }
 
     public String getId() {
         return Id;
@@ -109,7 +137,14 @@ public class ClassDetails {
         PortfolioId = portfolioId;
     }
 
-    public JSONObject getClassDetailJSON() {
+//    @JsonIgnore
+    public String getClassDetailJSON(){
+        return ClassDetailJSON;
+    }
+
+    @JsonProperty("classDetailJSON")
+//    @JsonProperty("filteredClassDetailJSON")
+    public JSONObject getFilteredClassDetailJSON() {
         return new JSONObject(ClassDetailJSON);
     }
 
@@ -157,6 +192,7 @@ public class ClassDetails {
         BranchCode = branchCode;
     }
 
+    @JsonIgnore
     public JSONObject getAllData(){
         JSONObject data = new JSONObject();
         data.put("Id", Id);
@@ -170,7 +206,7 @@ public class ClassDetails {
         data.put("PolicyIssuanceId", PolicyIssuanceId);
         data.put("ClassId", ClassId);
         data.put("PortfolioId", PortfolioId);
-        data.put("ClassDetailJSON", getClassDetailJSON());
+        data.put("ClassDetailJSON", getFilteredClassDetailJSON());
         data.put("CalulationDetailJSON", getCalulationDetailJSON());
         data.put("HasMultipleAssets", HasMultipleAssets);
         data.put("IsIssued", IsIssued);
